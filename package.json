@@ -1,0 +1,20 @@
+{
+  "name": "sdk-577-thiccc",
+  "version": "0.1.0",
+  "bin": {
+    "sdk-577-thiccc": "bin/sdk-577-thiccc.js"
+  },
+  "scripts": {
+    "build": "echo \"The build step is not required when using JavaScript!\" && exit 0",
+    "cdk": "cdk",
+    "test": "jest"
+  },
+  "devDependencies": {
+    "aws-cdk": "2.142.1",
+    "jest": "^29.7.0"
+  },
+  "dependencies": {
+    "aws-cdk-lib": "2.142.1",
+    "constructs": "^10.0.0"
+  }
+}
