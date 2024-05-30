@@ -7,6 +7,17 @@ The lambda function does a simple `ListTables` call to dynamodb and logs some me
 
 The CDK stack uses esbuild to bundle the function and marks a few unnecessary packages as external per my previous investigation on the credentials providers. It doesn't do any minification. [lib/sdk-577-thiccc-stack.mjs](lib/sdk-577-thiccc-stack.mjs) Enable the metafile option if you want to [analyze](https://esbuild.github.io/analyze/) the bundle which is output in `cdk.out/asset.<xxxxx>/index.meta.json` when you do a `npx cdk synth`.
 
+## Benchmarks
+  
+I was seeing a larger difference in coldstarts in my app but I was using client-sts, client-iam, client-dynamodb and lib-dynamodb.  This output shows a 24 ms increase in coldstart time and a 146435 byte increase in bundle size between 575 and 577.  This is a small sample size of 3 runs, but you should be able to replicate this in your own account.
+
+---
+| aws sdk | node version | avg(@initDuration) | bundleSize | # runs |
+| --- | --- | --- | --- | --- |
+| 3.575.0 | v20.13.1 | 246.79 | 316588 | 3 |
+| 3.577.0 | v20.13.1 | 270.0433 | 463023 | 3 |
+---
+
 ## Switching between AWS SDK versions
 ### 3.575.0
 `npm install @aws-sdk/client-dynamodb@3.575.0 --save-exact && npx cdk deploy;`
