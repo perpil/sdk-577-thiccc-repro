@@ -1,21 +1,24 @@
-# This is to repro the size and coldstart performance difference between the AWS SDK v3.575.0 and v3.577.0
+# AWS Javascript SDK v3.575 vs v3.577.0 Benchmark
 
-The lambda function does a simple `ListTables` call to dynamodb and logs some metadata [src](src/handler.mjs).  
+This is to repro the size and coldstart performance difference between the AWS JavaScript SDK v3.575.0 and v3.577.0
 
-The stack uses esbuild to bundle the function and marks a few unnecessary packages as external per my previous investigation on the credentials providers. I am not doing any minification.  You can turn on the metafile if you want to [analyze](https://esbuild.github.io/analyze/) the bundle which is output in `cdk.out/asset.<xxxxx>/index.meta.json` when you do a `npx cdk synth`.  [src](lib/sdk-577-thiccc-stack.mjs)
+## Code notes
+The lambda function does a simple `ListTables` call to dynamodb and logs some metadata [src/handler.mjs](src/handler.mjs).  It is frontend by a Lambda Function url.
+
+The CDK stack uses esbuild to bundle the function and marks a few unnecessary packages as external per my previous investigation on the credentials providers. It doesn't do any minification. [lib/sdk-577-thiccc-stack.mjs](lib/sdk-577-thiccc-stack.mjs) Enable the metafile option if you want to [analyze](https://esbuild.github.io/analyze/) the bundle which is output in `cdk.out/asset.<xxxxx>/index.meta.json` when you do a `npx cdk synth`.
 
 ## Switching between AWS SDK versions
 ### 3.575.0
-npm install @aws-sdk/client-dynamodb@3.575.0 --save-exact && npx cdk deploy;
+`npm install @aws-sdk/client-dynamodb@3.575.0 --save-exact && npx cdk deploy;`
 
 ### 3.577.0
-npm install @aws-sdk/client-dynamodb@3.577.0 --save-exact && npx cdk deploy;
+`npm install @aws-sdk/client-dynamodb@3.577.0 --save-exact && npx cdk deploy;`
 
-# Triggering a coldstart
+## Triggering a coldstart
 
-Once you've deployed the stack you can trigger a coldstart by hitting the url in the stack output.
+Once you've deployed the stack you can trigger a coldstart by hitting the url in the stack output.  You need to switch between versions and hit the url to force a coldstart, multiple invocations of the same version won't necessarily trigger a coldstart.
 
-# Collating the results
+## Collating the results
 Run the following CloudWatch Insights Query on `/aws/lambda/ThicccBenchmark` to collate the results:
 
 ```
