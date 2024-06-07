@@ -18,12 +18,27 @@ I was seeing a larger difference in coldstarts in my app but I was using client-
 | 3.577.0 | v20.13.1 | 270.0433 | 463023 | 3 |
 ---
 
-## Switching between AWS SDK versions
-### 3.575.0
-`npm install @aws-sdk/client-dynamodb@3.575.0 --save-exact && npx cdk deploy;`
+Update 6/6/2024
 
-### 3.577.0
-`npm install @aws-sdk/client-dynamodb@3.577.0 --save-exact && npx cdk deploy;`
+Version 3.592 is close in performance to 3.575, but is almost 50 ms slower when you include more clients.
+
+---
+| aws sdk | node version | avg(@initDuration) | bundleSize | # runs |
+| --- | --- | --- | --- | --- |
+| 3.568.0 | v20.13.1 | 395.291 | 398564 | 10 |
+| 3.575.0 | v20.13.1 | 446.9 | 406147 | 3 |
+| 3.592.0 | v20.13.1 | 441.9909 | 406821 | 11 |
+---
+
+## Switching between AWS SDK versions
+### 3.568.0
+`npm install @aws-sdk/client-dynamodb@3.568.0 @aws-sdk/client-sts@3.568.0 @aws-sdk/client-iam@3.568.0 @aws-sdk/lib-dynamodb@3.568.0 --save-exact && npm update && npm ci && npx cdk deploy;`
+
+### 3.575.0
+`npm install @aws-sdk/client-dynamodb@3.575.0 @aws-sdk/client-sts@3.575.0 @aws-sdk/client-iam@3.575.0 @aws-sdk/lib-dynamodb@3.575.0 --save-exact && npm update && npm ci && npx cdk deploy;`
+
+### 3.592.0
+`npm install @aws-sdk/client-dynamodb@3.592.0 @aws-sdk/client-sts@3.592.0 @aws-sdk/client-iam@3.592.0 @aws-sdk/lib-dynamodb@3.592.0 --save-exact && npm update && npm ci && npx cdk deploy;`
 
 ## Triggering a coldstart
 

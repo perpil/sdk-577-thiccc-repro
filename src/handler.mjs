@@ -1,13 +1,19 @@
-import { DynamoDBClient, ListTablesCommand } from "@aws-sdk/client-dynamodb";
 import { Metrics, MetricUnit } from "@aws-lambda-powertools/metrics";
 import { statSync } from "fs";
+import { GetCallerIdentityCommand, STSClient } from "@aws-sdk/client-sts";
+import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
+import { DynamoDBDocument } from "@aws-sdk/lib-dynamodb";
+import { IAMClient } from "@aws-sdk/client-iam";
 
 const metrics = new Metrics({
   namespace: "benchmark",
   serviceName: "thiccc",
 });
 
-const ddbClient = new DynamoDBClient({ region: process.env.AWS_REGION });
+const stsClient = new STSClient({ region: process.env.AWS_REGION });
+const iamClient = new IAMClient({ region: process.env.AWS_REGION });
+const dynamoDBClient = new DynamoDBClient({ region: process.env.AWS_REGION });
+const ddbDocClient = DynamoDBDocument.from(dynamoDBClient);
 let size, runtimeBuildDate;
 try {
   runtimeBuildDate = statSync("/var/runtime").mtime;
@@ -30,7 +36,7 @@ export const handler = async (event, context) => {
     metrics.addMetadata("requestId", context.awsRequestId);
     metrics.addMetadata("size", size);
     metrics.addMetadata("runtimeBuildDate", runtimeBuildDate);
-    await ddbClient.send(new ListTablesCommand());
+    await stsClient.send(new GetCallerIdentityCommand());
     success = 1;
     return {
       statusCode: 200,
