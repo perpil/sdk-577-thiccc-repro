@@ -20,8 +20,7 @@ I was seeing a larger difference in coldstarts in my app but I was using client-
 
 Update 6/6/2024
 
-I am now including client-sts, client-iam, client-dynamodb and lib-dynamodb in the benchmark.
-Version 3.592 is close in performance to 3.575, but is almost 50 ms slower when you include more clients.
+I am now including client-sts, client-iam, client-dynamodb and lib-dynamodb in the benchmark. Version 3.592 is close in performance to 3.575, but is almost 50 ms slower when you include more clients.
 
 ---
 | aws sdk | node version | avg(@initDuration) | bundleSize | # runs |
@@ -30,7 +29,7 @@ Version 3.592 is close in performance to 3.575, but is almost 50 ms slower when 
 | 3.575.0 | v20.13.1 | 269.3038 | 504269 | 8 |
 | 3.592.0 | v20.13.1 | 265.4675 | 504954 | 8 |
 ---
----
+
 
 ## Switching between AWS SDK versions
 ### 3.568.0
